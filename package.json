@@ -8,9 +8,9 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
-      "title": "Hello World",
-      "description": "Simple Command",
+      "name": "search",
+      "title": "Search",
+      "description": "Search for football team",
       "mode": "view"
     }
   ],
