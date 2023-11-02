@@ -21,6 +21,12 @@
       "title": "Test API",
       "description": "Confirm if the SportsMonk API key provided produces a successful response",
       "mode": "view"
+    },
+    {
+      "name": "search",
+      "title": "Search",
+      "description": "Search for football team",
+      "mode": "view"
     }
   ],
   "dependencies": {
