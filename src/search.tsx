@@ -11,7 +11,6 @@ type TeamListDropdownProps = {
 const TeamListDropdown = ({ categories, onChange }: TeamListDropdownProps) => {
   return (
     <List.Dropdown
-      storeValue
       tooltip="Select Team Category"
       onChange={onChange}
       defaultValue="all"
@@ -113,6 +112,7 @@ export default () => {
 
   return (
     <List
+      searchBarPlaceholder="Filter by title..."   
       searchBarAccessory={
         <TeamListDropdown
           categories={Object.values(Category)}
