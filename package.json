@@ -8,9 +8,9 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "search",
-      "title": "Search",
-      "description": "Search for football team",
+      "name": "searchTeam",
+      "title": "Search Team",
+      "description": "Search football team",
       "mode": "view"
     }
   ],
