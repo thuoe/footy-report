@@ -7,19 +7,22 @@
 
 /* eslint-disable @typescript-eslint/ban-types */
 
-type ExtensionPreferences = {}
+type ExtensionPreferences = {
+  /** API Key - SportMonks API Key used to fetch all relevant football data */
+  "apiKey": string
+}
 
 /** Preferences accessible in all the extension's commands */
 declare type Preferences = ExtensionPreferences
 
 declare namespace Preferences {
-  /** Preferences accessible in the `index` command */
-  export type Index = ExtensionPreferences & {}
+  /** Preferences accessible in the `test` command */
+  export type Test = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
-  /** Arguments passed to the `index` command */
-  export type Index = {}
+  /** Arguments passed to the `test` command */
+  export type Test = {}
 }
 
 

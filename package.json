@@ -6,11 +6,20 @@
   "icon": "command-icon.png",
   "author": "thuoe",
   "license": "MIT",
+  "preferences": [
+    {
+      "title": "API Key",
+      "name": "apiKey",
+      "description": "SportMonks API Key used to fetch all relevant football data",
+      "type": "password",
+      "required": true
+    }
+  ],
   "commands": [
     {
-      "name": "index",
-      "title": "Hello World",
-      "description": "Simple Command",
+      "name": "test",
+      "title": "Test API",
+      "description": "Confirm if the SportsMonk API key provided produces a successful response",
       "mode": "view"
     }
   ],
