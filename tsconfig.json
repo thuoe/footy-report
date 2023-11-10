@@ -3,6 +3,12 @@
   "display": "Node 18",
   "include": ["src/**/*", "raycast-env.d.ts"],
   "compilerOptions": {
+    "paths": {
+      "@src/api": ["./src/api"],
+      "@src/api/*": ["./src/api/*"],
+      "@src/hooks": ["./src/hooks"],
+      "@src/hooks/*": ["./src/hooks/*"]
+    },
     "lib": ["es2021"],
     "module": "commonjs",
     "target": "es2021",
