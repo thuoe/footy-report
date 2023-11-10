@@ -27,7 +27,7 @@ const useSportMonksClient = ({ path, method, params }: Blah) => {
           return {
             baseURL: axiosError.config?.baseURL,
             data: axiosError.response.data,
-            status: axiosError.response?.status,
+            status: axiosError.response.status,
             headers: axiosError.response.headers,
           };
         }
