@@ -2,44 +2,17 @@ import {
   Action,
   ActionPanel,
   Detail,
-  getPreferenceValues,
   openExtensionPreferences,
 } from "@raycast/api";
-import getClient from "@src/api/client";
-import axios, { AxiosError } from "axios";
-import { usePromise } from "@raycast/utils";
-
-interface Preferences {
-  apiKey: string;
-}
+import { useSportMonksClient } from "@src/hooks";
 
 const testPath = "/teams/search/Esbjerg";
 
 export default function Command() {
-  const preferences = getPreferenceValues<Preferences>();
-  const apiKey = preferences["apiKey"];
-  const client = getClient(apiKey);
-  const { isLoading, data } = usePromise(
-    async (testPath: string) => {
-      try {
-        const { status, headers } = await client.get(testPath);
-        return { status, contentType: headers["content-type"]?.toString() };
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const axiosError: AxiosError = error;
-          if (axiosError.response) {
-            return {
-              status: axiosError.response?.status,
-              contentType:
-                axiosError.response.headers["content-type"]?.toString(),
-            };
-          }
-        }
-      }
-    },
-    [testPath],
-  );
-
+  const { isLoading, data } = useSportMonksClient({
+    method: "get",
+    path: testPath,
+  });
   const title =
     data?.status === 200 ? "Successful Request!" : "Request Failure!";
   const message =
@@ -70,14 +43,11 @@ export default function Command() {
         }
         metadata={
           <Detail.Metadata>
-            <Detail.Metadata.Label
-              title="Base URL"
-              text={client.defaults.baseURL}
-            />
+            <Detail.Metadata.Label title="Base URL" text={data?.baseURL} />
             <Detail.Metadata.Label title="Test Path" text={testPath} />
             <Detail.Metadata.TagList title="Content Type">
               <Detail.Metadata.TagList.Item
-                text={data?.contentType}
+                text={data?.headers["content-type"]}
                 color="#B55ABE"
               />
             </Detail.Metadata.TagList>
