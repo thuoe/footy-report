@@ -1,5 +1,5 @@
 import { List } from "@raycast/api";
-import { Category } from "@src/components/section";
+import { Category } from "@src/types";
 
 const NextMatch = () => {
   return (

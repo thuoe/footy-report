@@ -1,0 +1,50 @@
+import Fixtures from "@src/components/Fixtures";
+import NextMatch from "@src/components/NextMatch";
+import Squad from "@src/components/Squad";
+import { List } from "@raycast/api";
+import { Category } from "@src/types";
+import { useState } from "react";
+
+const TeamDetails = () => {
+  const [category, setCategory] = useState<Category>(Category.All);
+  return (
+    <List
+      navigationTitle="Arsenal"
+      searchBarPlaceholder="Search within Arsenal"
+      searchBarAccessory={
+        <List.Dropdown
+          tooltip="Select Category"
+          onChange={(newValue) => {
+            setCategory(newValue as Category);
+          }}
+          defaultValue={Category.All}
+        >
+          {Object.values(Category).map((category) => {
+            return (
+              <List.Dropdown.Item
+                title={category}
+                key={category}
+                value={category}
+              />
+            );
+          })}
+        </List.Dropdown>
+      }
+    >
+      <>
+        {category === Category.All && (
+          <>
+            <NextMatch />
+            <Fixtures />
+            <Squad />
+          </>
+        )}
+        {category === Category.NextMatch && <NextMatch />}
+        {category === Category.Fixtures && <Fixtures />}
+        {category === Category.Squad && <Squad />}
+      </>
+    </List>
+  );
+};
+
+export default TeamDetails;
