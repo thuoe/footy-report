@@ -1,11 +1,11 @@
 import { List, Icon, Color } from "@raycast/api";
-import { Category } from "@src/components/section";
+import { Category } from "@src/types";
 
 const NextFixtures = () => {
   return (
-    <List.Section title={Category.Fixtures}>
+    <List.Section title={`Upcoming ${Category.Fixtures}`}>
       <List.Item
-        icon={Icon.Goal}
+        icon={Icon.Calendar}
         title="West Ham United vs Arsenal"
         accessories={[
           { tag: { value: "Away", color: Color.Magenta } },
@@ -14,7 +14,7 @@ const NextFixtures = () => {
         ]}
       />
       <List.Item
-        icon={Icon.Goal}
+        icon={Icon.Calendar}
         title="Newcastle vs Arsenal"
         accessories={[
           { tag: { value: "Away", color: Color.Magenta } },
@@ -23,7 +23,7 @@ const NextFixtures = () => {
         ]}
       />
       <List.Item
-        icon={Icon.Goal}
+        icon={Icon.Calendar}
         title="Arsenal vs Sevilla"
         accessories={[
           { tag: { value: "Home", color: Color.Yellow } },
