@@ -1,5 +1,5 @@
 import { useSportMonksClient } from "@src/hooks";
-import { Team } from "../types";
+import { Team } from "@src/types";
 
 const MAX_RESULTS_PER_PAGE = 10;
 

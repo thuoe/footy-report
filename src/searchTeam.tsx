@@ -1,128 +1,154 @@
-import { Action, Icon, ActionPanel, List, LocalStorage } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Icon,
+  Image,
+  List,
+  LocalStorage,
+  Toast,
+  showToast,
+} from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
-import { useEffect, useState } from "react";
-import TeamSections, { Category } from "@src/components/section";
-
-type TeamListDropdownProps = {
-  categories: `${Category}`[];
-  onChange: (newValue: string) => void;
-};
-
-const TeamListDropdown = ({ categories, onChange }: TeamListDropdownProps) => {
-  return (
-    <List.Dropdown
-      tooltip="Select Team Category"
-      onChange={onChange}
-      defaultValue="all"
-    >
-      {categories.map((category) => {
-        return (
-          <List.Dropdown.Item
-            title={category}
-            key={category}
-            value={category}
-          />
-        );
-      })}
-    </List.Dropdown>
-  );
-};
+import TeamDetails from "@src/components/TeamDetails";
+import { useFetchTeams } from "@src/hooks";
+import { Team } from "@src/types";
+import { useState } from "react";
 
 export default () => {
-  const { data, isLoading, revalidate } = useCachedPromise(async () => {
-    return LocalStorage.getItem<string>("team-searches");
+  const [searchText, setSearchText] = useState<string>("");
+  const {
+    data: favoritesCached,
+    isLoading: favoritesLoading,
+    revalidate,
+  } = useCachedPromise(async () => {
+    return LocalStorage.getItem<string>("favorite-teams");
   });
-  const [searchText, setSearchText] = useState("");
-  const [team, selectTeam] = useState("");
-  const [category, setCategory] = useState<Category>(Category.All);
+  const { data: teamsFound, isLoading: teamsLoading } = useFetchTeams(
+    searchText,
+    {
+      image_path: true,
+    },
+  );
 
-  const previousSearches: string[] = data ? JSON.parse(data) : [];
+  const favoriteTeams: Team[] = favoritesCached
+    ? JSON.parse(favoritesCached)
+    : [];
 
-  useEffect(() => {
-    const setList = async (list: string[]) => {
-      LocalStorage.setItem("team-searches", JSON.stringify(list));
-      revalidate();
-    };
-    const updateList = async () => {
-      const finalList = [...previousSearches, searchText];
-      await setList(finalList);
-    };
-    if (
-      searchText.length > 3 &&
-      !isLoading &&
-      previousSearches.includes(searchText.trim()) === false
-    ) {
-      updateList().catch(console.error);
-    }
-  }, [searchText, isLoading]);
-
-  if (!team) {
+  if (Boolean(searchText) === false) {
     return (
-      <>
-        <List
-          throttle
-          isLoading={isLoading}
-          navigationTitle="Search"
-          searchBarPlaceholder="Enter Team"
-          onSearchTextChange={setSearchText}
-        >
-          {previousSearches.length === 0 ? (
-            <List.EmptyView title="What team would you like to search for?" />
-          ) : (
-            <List.Section title="Recent team searches">
-              {previousSearches.map((item) => {
-                return (
-                  <List.Item
-                    title={item}
-                    key={item}
-                    actions={
-                      <ActionPanel title="Team actions">
-                        <Action
-                          title="Select Team"
-                          icon={Icon.ArrowRight}
-                          onAction={() => {
-                            selectTeam(item);
-                          }}
-                        />
-                        <Action
-                          title="Clear Search"
-                          icon={Icon.Trash}
-                          onAction={async () => {
-                            const newList = previousSearches.filter(
-                              (search) => search !== item,
-                            );
-                            LocalStorage.setItem(
-                              "team-searches",
-                              JSON.stringify(newList),
-                            );
-                            revalidate();
-                          }}
-                        />
-                      </ActionPanel>
-                    }
-                  />
-                );
-              })}
-            </List.Section>
-          )}
-        </List>
-      </>
+      <List
+        isLoading={favoritesLoading || teamsLoading}
+        navigationTitle="Search Team"
+        searchBarPlaceholder="Enter Team"
+        onSearchTextChange={setSearchText}
+        searchText={searchText}
+      >
+        {favoriteTeams.length === 0 ? (
+          <List.EmptyView
+            icon={Icon.MagnifyingGlass}
+            title="What team would you like to search for?"
+          />
+        ) : (
+          <List.Section
+            title="Favorited Teams"
+            subtitle={favoriteTeams.length.toString()}
+          >
+            {favoriteTeams.map((favTeam) => {
+              return (
+                <List.Item
+                  title={favTeam.name}
+                  key={favTeam.id}
+                  icon={{
+                    mask: Image.Mask.Circle,
+                    source: favTeam.image_path,
+                  }}
+                  actions={
+                    <ActionPanel title="Team actions">
+                      <Action.Push
+                        title="Select Team"
+                        icon={Icon.ArrowRightCircleFilled}
+                        target={<TeamDetails />}
+                      />
+                      <Action
+                        title="Remove Favorite"
+                        icon={Icon.StarDisabled}
+                        onAction={async () => {
+                          const newList = favoriteTeams.filter(
+                            (team) => team.name !== favTeam.name,
+                          );
+                          LocalStorage.setItem(
+                            "favorite-teams",
+                            JSON.stringify(newList),
+                          );
+                          revalidate();
+                          await showToast({
+                            style: Toast.Style.Success,
+                            title: `${favTeam.name} removed from favorites!`,
+                          });
+                        }}
+                      />
+                    </ActionPanel>
+                  }
+                />
+              );
+            })}
+          </List.Section>
+        )}
+      </List>
     );
   }
 
-  return (
-    <List
-      searchBarPlaceholder="Filter by title..."   
-      searchBarAccessory={
-        <TeamListDropdown
-          categories={Object.values(Category)}
-          onChange={(newValue) => {
-            setCategory(newValue as Category);
-          }}
-        />
-      }
-    >
-      <TeamSections category={category} />
-    </List>
-  );
+  if (searchText) {
+    return (
+      <List
+        throttle
+        isLoading={teamsLoading || favoritesLoading}
+        navigationTitle="Teams Found"
+        searchBarPlaceholder="Enter Team"
+        onSearchTextChange={setSearchText}
+        searchText={searchText}
+      >
+        {teamsFound.length === 0 ? (
+          <List.EmptyView
+            icon={Icon.XMarkCircleFilled}
+            title={`Whoops! No teams found with the name: ${searchText}`}
+          />
+        ) : (
+          teamsFound.map((team) => {
+            return (
+              <List.Item
+                key={team.id}
+                title={team.name}
+                icon={{ mask: Image.Mask.Circle, source: team.image_path }}
+                actions={
+                  <ActionPanel title="Team Actions">
+                    <Action.Push
+                      title="Select Team"
+                      icon={Icon.ArrowRightCircleFilled}
+                      target={<TeamDetails />}
+                    />
+                    <Action
+                      title="Favorite Team"
+                      icon={Icon.Star}
+                      onAction={async () => {
+                        await LocalStorage.setItem(
+                          "favorite-teams",
+                          JSON.stringify([...favoriteTeams, team]),
+                        );
+                        revalidate();
+                        await showToast({
+                          style: Toast.Style.Success,
+                          title: `${team.name} add to favorites!`,
+                        });
+                      }}
+                    />
+                  </ActionPanel>
+                }
+              />
+            );
+          })
+        )}
+      </List>
+    );
+  }
 };
