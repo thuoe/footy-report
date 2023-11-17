@@ -35,6 +35,7 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
             id: rest.id,
             jersey_number: rest.jersey_number,
             name: player.display_name,
+            date_of_birth: player.date_of_birth,
             image_path: player.image_path,
             position: player.position?.name,
             country: {

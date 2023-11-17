@@ -13,6 +13,7 @@ export type Country = {
 export type Player = {
   id: string;
   name: string;
+  date_of_birth: string;
   image_path: string;
   jersey_number: number;
   position: string;
