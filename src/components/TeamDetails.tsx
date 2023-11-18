@@ -2,10 +2,10 @@ import Fixtures from "@src/components/Fixtures";
 import NextMatch from "@src/components/NextMatch";
 import Squad from "@src/components/Squad";
 import { List } from "@raycast/api";
-import { Category } from "@src/types";
+import { Category, Team } from "@src/types";
 import { useState } from "react";
 
-const TeamDetails = () => {
+const TeamDetails = ({ team }: { team: Team }) => {
   const [category, setCategory] = useState<Category>(Category.All);
   return (
     <List
@@ -36,12 +36,12 @@ const TeamDetails = () => {
           <>
             <NextMatch />
             <Fixtures />
-            <Squad />
+            <Squad team={team} limit={6} />
           </>
         )}
         {category === Category.NextMatch && <NextMatch />}
         {category === Category.Fixtures && <Fixtures />}
-        {category === Category.Squad && <Squad />}
+        {category === Category.Squad && <Squad team={team} limit={6} />}
       </>
     </List>
   );
