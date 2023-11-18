@@ -1,20 +1,11 @@
 import { useSportMonksClient } from "@src/hooks";
 import { Team } from "@src/types";
+import { computeSelectFields } from "@src/utils";
 
 const MAX_RESULTS_PER_PAGE = 10;
 
 type SelectFields = {
   image_path?: boolean;
-};
-
-const computeSelectFields = (selectFields: SelectFields) => {
-  const selectParams: string[] = [];
-  Object.entries(selectFields).forEach(([key, isSelected]) => {
-    if (isSelected) {
-      selectParams.push(key);
-    }
-  });
-  return selectParams.length > 0 ? selectParams.join(",") : "";
 };
 
 const useFetchTeams = (name: string, selectFields: SelectFields) => {
