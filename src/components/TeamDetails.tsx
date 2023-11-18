@@ -9,8 +9,8 @@ const TeamDetails = ({ team }: { team: Team }) => {
   const [category, setCategory] = useState<Category>(Category.All);
   return (
     <List
-      navigationTitle="Arsenal"
-      searchBarPlaceholder="Search within Arsenal"
+      navigationTitle={`${team.name}`}
+      searchBarPlaceholder={`Search within ${team.name}`}
       searchBarAccessory={
         <List.Dropdown
           tooltip="Select Category"
