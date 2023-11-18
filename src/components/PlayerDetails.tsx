@@ -9,7 +9,7 @@ const PlayerDetails = ({
   team: { name: string; image_path: string };
 }) => {
   const markdown = `
-  ![](${player.image_path})
+  ![](${player.image_path}?raycast-width=300&raycast-height=300)
   `;
   return (
     <Detail
