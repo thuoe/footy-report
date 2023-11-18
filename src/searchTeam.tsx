@@ -67,7 +67,7 @@ export default () => {
                       <Action.Push
                         title="Select Team"
                         icon={Icon.ArrowRightCircleFilled}
-                        target={<TeamDetails />}
+                        target={<TeamDetails team={favTeam} />}
                       />
                       <Action
                         title="Remove Favorite"
@@ -125,7 +125,7 @@ export default () => {
                     <Action.Push
                       title="Select Team"
                       icon={Icon.ArrowRightCircleFilled}
-                      target={<TeamDetails />}
+                      target={<TeamDetails team={team} />}
                     />
                     <Action
                       title="Favorite Team"

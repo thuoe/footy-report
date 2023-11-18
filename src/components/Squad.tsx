@@ -1,87 +1,52 @@
-import { List, Color, Image } from "@raycast/api";
-import { Category } from "@src/types";
+import { List, Color, Image, ActionPanel, Action } from "@raycast/api";
+import { Category, Team } from "@src/types";
+import PlayerDetails from "@src/components/PlayerDetails";
 
-const Squad = () => {
+const Squad = ({ team, limit }: { team: Team; limit?: number }) => {
+  const limitedPlayers = team.players.slice(0, limit || team.players.length);
   return (
-    <List.Section title={Category.Squad} subtitle="3">
-      <List.Item
-        icon={{
-          source:
-            "https://www.arsenal.com/sites/default/files/styles/large_16x9/public/images/Headshot_White_1510x850_0.jpg",
-          mask: Image.Mask.Circle,
-        }}
-        title="Ben White"
-        key="Ben White"
-        subtitle="Arsenal"
-        accessories={[
-          {
-            icon: {
+    <List.Section title={Category.Squad} subtitle={`${limitedPlayers.length}`}>
+      {limitedPlayers.map((player) => {
+        return (
+          <List.Item
+            icon={{
+              source: player?.image_path,
               mask: Image.Mask.Circle,
-              source:
-                "https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Flag_of_England.svg/1600px-Flag_of_England.svg.png?20111003040319",
-            },
-          },
-          {
-            tag: {
-              value: "4",
-              color: Color.Orange,
-            },
-          },
-          { text: { value: "Defender", color: Color.SecondaryText } },
-        ]}
-      />
-      <List.Item
-        icon={{
-          source:
-            "https://www.arsenal.com/sites/default/files/styles/large_16x9/public/images/MicrosoftTeams-image%20%2831%29_0.png?auto=webp&itok=zY0rjgVn",
-          mask: Image.Mask.Circle,
-        }}
-        title="William Saliba"
-        key="William Saliba"
-        subtitle="Arsenal"
-        accessories={[
-          {
-            icon: {
-              mask: Image.Mask.RoundedRectangle,
-              source:
-                "https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/2880px-Flag_of_France.svg.png",
-            },
-          },
-          {
-            tag: {
-              value: "2",
-              color: Color.Orange,
-            },
-          },
-          { text: { value: "Defender", color: Color.SecondaryText } },
-        ]}
-      />
-      <List.Item
-        icon={{
-          source:
-            "https://www.arsenal.com/sites/default/files/styles/large_16x9/public/images/MicrosoftTeams-image%20%2827%29_0.png?auto=webp&itok=9GPY-bZ8",
-          mask: Image.Mask.Circle,
-        }}
-        title="Jurrien Timber"
-        key="Jurrien Timber"
-        subtitle="Arsenal"
-        accessories={[
-          {
-            icon: {
-              mask: Image.Mask.Circle,
-              source:
-                "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/2880px-Flag_of_the_Netherlands.svg.png",
-            },
-          },
-          {
-            tag: {
-              value: "12",
-              color: Color.Orange,
-            },
-          },
-          { text: { value: "Defender", color: Color.SecondaryText } },
-        ]}
-      />
+            }}
+            title={player.name}
+            key={player.id}
+            subtitle={team.name}
+            accessories={[
+              {
+                icon: {
+                  mask: Image.Mask.RoundedRectangle,
+                  source: player.country.image_path,
+                },
+              },
+              {
+                tag: {
+                  value: player?.jersey_number?.toString() ?? "N/A",
+                  color: Color.Orange,
+                },
+              },
+              { text: { value: player.position, color: Color.SecondaryText } },
+            ]}
+            actions={
+              <ActionPanel title="Player Actions">
+                <Action.Push
+                  title="View Player Details"
+                  target={
+                    <PlayerDetails
+                      team={{ name: team.name, image_path: team.image_path }}
+                      player={player}
+                    />
+                  }
+                />
+              </ActionPanel>
+            }
+          />
+        );
+      })}
     </List.Section>
   );
 };
