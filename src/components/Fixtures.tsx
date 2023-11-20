@@ -1,10 +1,10 @@
 import { List, Icon, Color, Image } from "@raycast/api";
 import { Category, Fixture, Location, Result } from "@src/types";
 
-const NextFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
+const PrevFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
   return (
     <List.Section
-      title={`Upcoming ${Category.Fixtures}`}
+      title={`Previous ${Category.Fixtures}`}
       subtitle={`${fixtures?.length}`}
     >
       {fixtures?.map((fixture) => {
@@ -56,4 +56,4 @@ const NextFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
   );
 };
 
-export default NextFixtures;
+export default PrevFixtures;

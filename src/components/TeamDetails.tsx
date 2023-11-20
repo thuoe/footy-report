@@ -1,4 +1,4 @@
-import Fixtures from "@src/components/Fixtures";
+import PrevFixtures from "@src/components/Fixtures";
 import NextMatch from "@src/components/NextMatch";
 import Squad from "@src/components/Squad";
 import { List } from "@raycast/api";
@@ -42,12 +42,12 @@ const TeamDetails = ({ team }: { team: Team }) => {
         {category === Category.All && (
           <>
             <NextMatch />
-            <Fixtures fixtures={data} />
+            <PrevFixtures fixtures={data} />
             <Squad team={team} limit={6} />
           </>
         )}
         {category === Category.NextMatch && <NextMatch />}
-        {category === Category.Fixtures && <Fixtures fixtures={data} />}
+        {category === Category.Fixtures && <PrevFixtures fixtures={data} />}
         {category === Category.Squad && <Squad team={team} limit={6} />}
       </>
     </List>
