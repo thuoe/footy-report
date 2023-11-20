@@ -1,6 +1,5 @@
 import { List, Icon, Color, Image } from "@raycast/api";
 import { Category, Fixture, Location, Result } from "@src/types";
-import { format } from "date-fns";
 
 const NextFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
   return (
@@ -45,7 +44,7 @@ const NextFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
               },
               {
                 text: {
-                  value: format(new Date(fixture.starting_at), "eee, LLL d"),
+                  value: fixture.starting_at,
                   color: Color.SecondaryText,
                 },
               },
