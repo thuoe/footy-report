@@ -5,7 +5,7 @@ import PlayerDetails from "@src/components/PlayerDetails";
 const Squad = ({ team, limit }: { team: Team; limit?: number }) => {
   const limitedPlayers = team.players.slice(0, limit || team.players.length);
   return (
-    <List.Section title={Category.Squad} subtitle={`${limitedPlayers.length}`}>
+    <List.Section title={Category.Squad} subtitle={`${team.players.length}`}>
       {limitedPlayers.map((player) => {
         return (
           <List.Item
