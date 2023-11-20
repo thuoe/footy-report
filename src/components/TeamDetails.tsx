@@ -4,11 +4,18 @@ import Squad from "@src/components/Squad";
 import { List } from "@raycast/api";
 import { Category, Team } from "@src/types";
 import { useState } from "react";
+import { useFetchFixtures } from "@src/hooks";
 
 const TeamDetails = ({ team }: { team: Team }) => {
   const [category, setCategory] = useState<Category>(Category.All);
+  const { data, isLoading } = useFetchFixtures(team.id, {
+    result_info: true,
+    starting_at: true,
+  });
   return (
     <List
+      throttle
+      isLoading={isLoading}
       navigationTitle={`${team.name}`}
       searchBarPlaceholder={`Search within ${team.name}`}
       searchBarAccessory={
@@ -35,12 +42,12 @@ const TeamDetails = ({ team }: { team: Team }) => {
         {category === Category.All && (
           <>
             <NextMatch />
-            <Fixtures />
+            <Fixtures fixtures={data} />
             <Squad team={team} limit={6} />
           </>
         )}
         {category === Category.NextMatch && <NextMatch />}
-        {category === Category.Fixtures && <Fixtures />}
+        {category === Category.Fixtures && <Fixtures fixtures={data} />}
         {category === Category.Squad && <Squad team={team} limit={6} />}
       </>
     </List>
