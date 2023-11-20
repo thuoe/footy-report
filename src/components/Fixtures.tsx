@@ -1,36 +1,58 @@
-import { List, Icon, Color } from "@raycast/api";
-import { Category } from "@src/types";
+import { List, Icon, Color, Image } from "@raycast/api";
+import { Category, Fixture, Location, Result } from "@src/types";
+import { format } from "date-fns";
 
-const NextFixtures = () => {
+const NextFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
   return (
-    <List.Section title={`Upcoming ${Category.Fixtures}`}>
-      <List.Item
-        icon={Icon.Calendar}
-        title="West Ham United vs Arsenal"
-        accessories={[
-          { tag: { value: "Away", color: Color.Magenta } },
-          { tag: { value: `EFL Cup`, color: Color.PrimaryText } },
-          { text: { value: `Today 7:30pm`, color: Color.SecondaryText } },
-        ]}
-      />
-      <List.Item
-        icon={Icon.Calendar}
-        title="Newcastle vs Arsenal"
-        accessories={[
-          { tag: { value: "Away", color: Color.Magenta } },
-          { tag: { value: `Premier League`, color: Color.PrimaryText } },
-          { text: { value: `Today 7:30pm`, color: Color.SecondaryText } },
-        ]}
-      />
-      <List.Item
-        icon={Icon.Calendar}
-        title="Arsenal vs Sevilla"
-        accessories={[
-          { tag: { value: "Home", color: Color.Yellow } },
-          { tag: { value: `Champions League`, color: Color.PrimaryText } },
-          { text: { value: `Today 7:30pm`, color: Color.SecondaryText } },
-        ]}
-      />
+    <List.Section
+      title={`Upcoming ${Category.Fixtures}`}
+      subtitle={`${fixtures?.length}`}
+    >
+      {fixtures?.map((fixture) => {
+        const resultIcon =
+          fixture.result === Result.Win
+            ? { tintColor: Color.Green, source: Icon.CheckCircle }
+            : fixture.result === Result.Draw
+            ? { tintColor: Color.SecondaryText, source: Icon.MinusCircle }
+            : fixture.result === Result.Loss
+            ? { tintColor: Color.Red, source: Icon.XMarkCircle }
+            : Icon.Calendar;
+        const resultPrefix = fixture.score
+          ? `${fixture.score.host_goals} - ${fixture.score.away_goals} |`
+          : "";
+        return (
+          <List.Item
+            icon={resultIcon}
+            title={`${resultPrefix} ${fixture.name}`}
+            key={fixture.name}
+            subtitle={`${fixture.venue}`}
+            accessories={[
+              {
+                tag: {
+                  value: fixture.league.name,
+                  color: Color.SecondaryText,
+                },
+                icon: {
+                  mask: Image.Mask.Circle,
+                  source: fixture.league.image_path,
+                },
+              },
+              {
+                tag: {
+                  value: fixture.location === Location.Home ? "Home" : "Away",
+                  color: Color.Orange,
+                },
+              },
+              {
+                text: {
+                  value: format(new Date(fixture.starting_at), "eee, LLL d"),
+                  color: Color.SecondaryText,
+                },
+              },
+            ]}
+          />
+        );
+      })}
     </List.Section>
   );
 };
