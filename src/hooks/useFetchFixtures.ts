@@ -1,6 +1,6 @@
 import { computeSelectFields } from "@src/utils";
 import useSportMonksClient from "./useSportMonksClient";
-import { subDays, format } from "date-fns";
+import { subDays, format, addDays } from "date-fns";
 import { Fixture, Result } from "@src/types";
 
 type SelectFields = {
@@ -19,8 +19,8 @@ const computeScore =
 
 const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
   const selectedFields = computeSelectFields(selectFields);
-  const startDate = format(subDays(new Date(), 28), "y-M-d");
-  const endDate = format(new Date(), "y-M-d");
+  const startDate = format(subDays(new Date(), 30), "y-MM-ii");
+  const endDate = format(addDays(new Date(), 45), "y-MM-ii");
   const { data, isLoading, revalidate } = useSportMonksClient({
     method: "get",
     path: `/fixtures/between/${startDate}/${endDate}/${teamId}?include=league;venue;participants;scores&select=name,${selectedFields}`,
@@ -55,8 +55,14 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
           : null,
         location: participants.find((p) => p.id === teamId).meta.location,
         score: {
-          host_goals: scores.reduce(computeScore("home"), 0),
-          away_goals: scores.reduce(computeScore("away"), 0),
+          host_goals:
+            scores.length > 0
+              ? scores.reduce(computeScore("home"), 0)
+              : undefined,
+          away_goals:
+            scores.length > 0
+              ? scores.reduce(computeScore("away"), 0)
+              : undefined,
         },
       };
     })
