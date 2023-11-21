@@ -1,7 +1,7 @@
 export enum Category {
   All = "All",
-  NextMatch = "Next Match",
-  Fixtures = "Fixtures",
+  UpcomingMatches = "Upcoming Matches",
+  PrevFixtures = "Previous Fixtures",
   Squad = "Squad",
 }
 

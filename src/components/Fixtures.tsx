@@ -1,12 +1,15 @@
 import { List, Icon, Color, Image } from "@raycast/api";
-import { Category, Fixture, Location, Result } from "@src/types";
+import { Fixture, Location, Result } from "@src/types";
 
-const PrevFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
+const Fixtures = ({
+  fixtures,
+  title,
+}: {
+  fixtures?: Fixture[];
+  title: string;
+}) => {
   return (
-    <List.Section
-      title={`Previous ${Category.Fixtures}`}
-      subtitle={`${fixtures?.length}`}
-    >
+    <List.Section title={title} subtitle={`${fixtures?.length}`}>
       {fixtures?.map((fixture) => {
         const resultIcon =
           fixture.result === Result.Win
@@ -57,4 +60,4 @@ const PrevFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
   );
 };
 
-export default PrevFixtures;
+export default Fixtures;

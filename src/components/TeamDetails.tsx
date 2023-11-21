@@ -1,9 +1,8 @@
-import PrevFixtures from "@src/components/Fixtures";
-import NextMatch from "@src/components/NextMatch";
+import Fixtures from "@src/components/Fixtures";
 import Squad from "@src/components/Squad";
 import { List } from "@raycast/api";
 import { Category, Team } from "@src/types";
-import { useState } from "react";
+import { useState, ComponentProps } from "react";
 import { useFetchFixtures } from "@src/hooks";
 
 const TeamDetails = ({ team }: { team: Team }) => {
@@ -12,6 +11,19 @@ const TeamDetails = ({ team }: { team: Team }) => {
     result_info: true,
     starting_at: true,
   });
+
+  const playedFixtureIndex = data?.findIndex((fixture) => fixture.result);
+  const upcomingFixtures = data?.slice(0, playedFixtureIndex);
+  const prevFixtures = data?.slice(playedFixtureIndex + 1);
+  const upcomingProps: ComponentProps<typeof Fixtures> = {
+    title: "Upcoming Matches",
+    fixtures: upcomingFixtures,
+  };
+  const prevProps: ComponentProps<typeof Fixtures> = {
+    title: "Previous Fixtures",
+    fixtures: prevFixtures,
+  };
+
   return (
     <List
       throttle
@@ -41,13 +53,15 @@ const TeamDetails = ({ team }: { team: Team }) => {
       <>
         {category === Category.All && (
           <>
-            <NextMatch />
-            <PrevFixtures fixtures={data} />
+            <Fixtures {...upcomingProps} />
+            <Fixtures {...prevProps} />
             <Squad team={team} limit={6} />
           </>
         )}
-        {category === Category.NextMatch && <NextMatch />}
-        {category === Category.Fixtures && <PrevFixtures fixtures={data} />}
+        {category === Category.UpcomingMatches && (
+          <Fixtures {...upcomingProps} />
+        )}
+        {category === Category.PrevFixtures && <Fixtures {...prevProps} />}
         {category === Category.Squad && <Squad team={team} limit={6} />}
       </>
     </List>

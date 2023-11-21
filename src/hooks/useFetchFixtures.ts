@@ -20,7 +20,7 @@ const computeScore =
 const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
   const selectedFields = computeSelectFields(selectFields);
   const startDate = format(subDays(new Date(), 30), "y-MM-ii");
-  const endDate = format(addDays(new Date(), 45), "y-MM-ii");
+  const endDate = format(addDays(new Date(), 30), "y-MM-ii");
   const { data, isLoading, revalidate } = useSportMonksClient({
     method: "get",
     path: `/fixtures/between/${startDate}/${endDate}/${teamId}?include=league;venue;participants;scores&select=name,${selectedFields}`,
