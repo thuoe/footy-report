@@ -16,9 +16,10 @@ const PrevFixtures = ({ fixtures }: { fixtures?: Fixture[] }) => {
             : fixture.result === Result.Loss
             ? { tintColor: Color.Red, source: Icon.XMarkCircle }
             : Icon.Calendar;
-        const resultPrefix = fixture.score
-          ? `${fixture.score.host_goals} - ${fixture.score.away_goals} |`
-          : "";
+        const resultPrefix =
+          typeof fixture.score?.host_goals === "number"
+            ? `${fixture.score.host_goals} - ${fixture.score.away_goals} |`
+            : "";
         return (
           <List.Item
             icon={resultIcon}
