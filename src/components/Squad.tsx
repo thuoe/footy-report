@@ -1,4 +1,4 @@
-import { List, Color, Image, ActionPanel, Action } from "@raycast/api";
+import { List, Color, Image, ActionPanel, Action, Icon } from "@raycast/api";
 import { Category, Team } from "@src/types";
 import PlayerDetails from "@src/components/PlayerDetails";
 
@@ -35,6 +35,7 @@ const Squad = ({ team, limit }: { team: Team; limit?: number }) => {
               <ActionPanel title="Player Actions">
                 <Action.Push
                   title="View Player Details"
+                  icon={Icon.PersonCircle}
                   target={
                     <PlayerDetails
                       team={{ name: team.name, image_path: team.image_path }}
