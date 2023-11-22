@@ -4,13 +4,16 @@ import { Fixture, Location, Result } from "@src/types";
 const Fixtures = ({
   fixtures,
   title,
+  limit,
 }: {
   fixtures?: Fixture[];
   title: string;
+  limit?: number;
 }) => {
+  const limitedFixtures = fixtures?.slice(0, limit || fixtures?.length);
   return (
-    <List.Section title={title} subtitle={`${fixtures?.length}`}>
-      {fixtures?.map((fixture) => {
+    <List.Section title={title} subtitle={`${limitedFixtures?.length}`}>
+      {limitedFixtures?.map((fixture) => {
         const resultIcon =
           fixture.result === Result.Win
             ? { tintColor: Color.Green, source: Icon.CheckCircle }
