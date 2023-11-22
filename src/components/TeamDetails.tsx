@@ -53,15 +53,17 @@ const TeamDetails = ({ team }: { team: Team }) => {
       <>
         {category === Category.All && (
           <>
-            <Fixtures {...upcomingProps} />
-            <Fixtures {...prevProps} />
+            <Fixtures {...upcomingProps} limit={6} />
+            <Fixtures {...prevProps} limit={6} />
             <Squad team={team} limit={6} />
           </>
         )}
         {category === Category.UpcomingMatches && (
-          <Fixtures {...upcomingProps} />
+          <Fixtures {...upcomingProps} limit={6} />
         )}
-        {category === Category.PrevFixtures && <Fixtures {...prevProps} />}
+        {category === Category.PrevFixtures && (
+          <Fixtures {...prevProps} limit={6} />
+        )}
         {category === Category.Squad && <Squad team={team} limit={6} />}
       </>
     </List>
