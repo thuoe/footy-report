@@ -30,7 +30,7 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
       const [host, away] = participants;
       return {
         name: fixtureData.name,
-        starting_at: format(new Date(fixtureData.starting_at), "eee, LLL d"),
+        starting_at: new Date(fixtureData.starting_at),
         league: {
           name: league.name,
           image_path: league.image_path,

@@ -1,5 +1,16 @@
-import { List, Icon, Color, Image } from "@raycast/api";
+import {
+  List,
+  Icon,
+  Color,
+  Image,
+  Action,
+  ActionPanel,
+  showToast,
+  Toast,
+} from "@raycast/api";
+import { runAppleScript } from "@raycast/utils";
 import { Fixture, Location, Result } from "@src/types";
+import { addHours, format } from "date-fns";
 
 const Fixtures = ({
   fixtures,
@@ -14,6 +25,8 @@ const Fixtures = ({
   return (
     <List.Section title={title} subtitle={`${limitedFixtures?.length}`}>
       {limitedFixtures?.map((fixture) => {
+        const fullTime = addHours(fixture.starting_at, 2);
+        const formattedDate = format(fixture.starting_at, "eee, LLL d");
         const resultIcon =
           fixture.result === Result.Win
             ? { tintColor: Color.Green, source: Icon.CheckCircle }
@@ -32,6 +45,40 @@ const Fixtures = ({
             title={`${resultPrefix} ${fixture.name}`}
             key={fixture.name}
             subtitle={`${fixture.venue}`}
+            actions={
+              resultIcon === Icon.Calendar && (
+                <ActionPanel title="Fixture actions">
+                  <Action
+                    title="Save to Calender"
+                    icon={Icon.Calendar}
+                    onAction={async () => {
+                      await runAppleScript(
+                        `
+                        var app = Application.currentApplication()
+                        var Calendar = Application("Calendar")
+                        Calendar.activate()
+                        var calendars = Calendar.calendars.whose({name: "Calendar"})
+                        var defaultCalendar = calendars[0]
+                        var event = Calendar.Event({
+                          summary: "${fixture.name}", 
+                          startDate: new Date(${fixture.starting_at.getTime()}), 
+                          endDate: new Date(${fullTime.getTime()}),
+                          location: "${fixture.venue}"
+                        })
+                        defaultCalendar.events.push(event)
+                        event.show()
+                      `,
+                        { language: "JavaScript" },
+                      );
+                      await showToast({
+                        style: Toast.Style.Success,
+                        title: "Fixture saved to Calendar!",
+                      });
+                    }}
+                  />
+                </ActionPanel>
+              )
+            }
             accessories={[
               {
                 tag: {
@@ -51,7 +98,7 @@ const Fixtures = ({
               },
               {
                 text: {
-                  value: fixture.starting_at,
+                  value: formattedDate,
                   color: Color.SecondaryText,
                 },
               },
