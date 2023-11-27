@@ -9,7 +9,9 @@
 
 type ExtensionPreferences = {
   /** API Key - SportMonks API Key used to fetch all relevant football data */
-  "apiKey": string
+  "apiKey": string,
+  /** Calendar Name - Name of the calendar you wish to save all fixture dates */
+  "calendarName": string
 }
 
 /** Preferences accessible in all the extension's commands */
