@@ -50,7 +50,7 @@ export enum Result {
 
 export type Fixture = {
   name: string;
-  starting_at: string;
+  starting_at: Date;
   league: League;
   venue: string;
   location: Location;
@@ -63,4 +63,8 @@ export type Fixture = {
     host_goals: number;
     away_goals: number;
   };
+  tvstations?: {
+    name: string;
+    url: string;
+  }[];
 };

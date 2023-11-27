@@ -1,5 +1,18 @@
-import { List, Icon, Color, Image } from "@raycast/api";
+import {
+  List,
+  Icon,
+  Color,
+  Image,
+  Action,
+  ActionPanel,
+  showToast,
+  Toast,
+  confirmAlert,
+  getPreferenceValues,
+} from "@raycast/api";
+import { runAppleScript } from "@raycast/utils";
 import { Fixture, Location, Result } from "@src/types";
+import { addHours, format } from "date-fns";
 
 const Fixtures = ({
   fixtures,
@@ -11,9 +24,12 @@ const Fixtures = ({
   limit?: number;
 }) => {
   const limitedFixtures = fixtures?.slice(0, limit || fixtures?.length);
+  const { calendarName } = getPreferenceValues<Preferences>();
   return (
     <List.Section title={title} subtitle={`${limitedFixtures?.length}`}>
       {limitedFixtures?.map((fixture) => {
+        const fullTime = addHours(fixture.starting_at, 2);
+        const formattedDate = format(fixture.starting_at, "eee, LLL d");
         const resultIcon =
           fixture.result === Result.Win
             ? { tintColor: Color.Green, source: Icon.CheckCircle }
@@ -26,12 +42,60 @@ const Fixtures = ({
           typeof fixture.score?.host_goals === "number"
             ? `${fixture.score.host_goals} - ${fixture.score.away_goals} |`
             : "";
+        const description = `${fixture.tvstations
+          ?.map((tvStation) => `${tvStation.name}: ${tvStation.url}`)
+          .join("\n")}`;
         return (
           <List.Item
             icon={resultIcon}
             title={`${resultPrefix} ${fixture.name}`}
             key={fixture.name}
             subtitle={`${fixture.venue}`}
+            actions={
+              resultIcon === Icon.Calendar && (
+                <ActionPanel title="Fixture actions">
+                  <Action
+                    title="Save to Calender"
+                    icon={Icon.Calendar}
+                    onAction={async () => {
+                      await confirmAlert({
+                        title: "Save to Calendar",
+                        message:
+                          "You are about to save this fixture as an alert on the default Calendar app. Do you wish to continue?",
+                        primaryAction: {
+                          title: "Save",
+                          onAction: async () => {
+                            await runAppleScript(
+                              `
+                              var app = Application.currentApplication()
+                              var Calendar = Application("${calendarName}")
+                              Calendar.activate()
+                              var calendars = Calendar.calendars.whose({name: "Calendar"})
+                              var defaultCalendar = calendars[0]
+                              var event = Calendar.Event({
+                                summary: "${fixture.name}",
+                                description: "${description}",
+                                startDate: new Date(${fixture.starting_at.getTime()}), 
+                                endDate: new Date(${fullTime.getTime()}),
+                                location: "${fixture.venue}"
+                              })
+                              defaultCalendar.events.push(event)
+                              event.show()
+                            `,
+                              { language: "JavaScript" },
+                            );
+                            await showToast({
+                              style: Toast.Style.Success,
+                              title: "Fixture saved to Calendar!",
+                            });
+                          },
+                        },
+                      });
+                    }}
+                  />
+                </ActionPanel>
+              )
+            }
             accessories={[
               {
                 tag: {
@@ -51,7 +115,7 @@ const Fixtures = ({
               },
               {
                 text: {
-                  value: fixture.starting_at,
+                  value: formattedDate,
                   color: Color.SecondaryText,
                 },
               },
