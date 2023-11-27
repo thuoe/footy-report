@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "footy-report",
   "title": "Footy Report",
-  "description": "",
+  "description": "blah",
   "icon": "command-icon.png",
   "author": "thuoe",
   "license": "MIT",
@@ -13,6 +13,14 @@
       "description": "SportMonks API Key used to fetch all relevant football data",
       "type": "password",
       "required": true
+    },
+    {
+      "title": "Calendar Name",
+      "name": "calendarName",
+      "description": "Name of the calendar you wish to save all fixture dates",
+      "type": "textfield",
+      "default": "Calendar",
+      "required": false
     }
   ],
   "commands": [

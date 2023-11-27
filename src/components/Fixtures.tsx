@@ -8,6 +8,7 @@ import {
   showToast,
   Toast,
   confirmAlert,
+  getPreferenceValues,
 } from "@raycast/api";
 import { runAppleScript } from "@raycast/utils";
 import { Fixture, Location, Result } from "@src/types";
@@ -23,6 +24,7 @@ const Fixtures = ({
   limit?: number;
 }) => {
   const limitedFixtures = fixtures?.slice(0, limit || fixtures?.length);
+  const { calendarName } = getPreferenceValues<Preferences>();
   return (
     <List.Section title={title} subtitle={`${limitedFixtures?.length}`}>
       {limitedFixtures?.map((fixture) => {
@@ -63,7 +65,7 @@ const Fixtures = ({
                             await runAppleScript(
                               `
                               var app = Application.currentApplication()
-                              var Calendar = Application("Calendar")
+                              var Calendar = Application("${calendarName}")
                               Calendar.activate()
                               var calendars = Calendar.calendars.whose({name: "Calendar"})
                               var defaultCalendar = calendars[0]
