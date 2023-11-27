@@ -7,6 +7,7 @@ import {
   ActionPanel,
   showToast,
   Toast,
+  confirmAlert,
 } from "@raycast/api";
 import { runAppleScript } from "@raycast/utils";
 import { Fixture, Location, Result } from "@src/types";
@@ -52,27 +53,37 @@ const Fixtures = ({
                     title="Save to Calender"
                     icon={Icon.Calendar}
                     onAction={async () => {
-                      await runAppleScript(
-                        `
-                        var app = Application.currentApplication()
-                        var Calendar = Application("Calendar")
-                        Calendar.activate()
-                        var calendars = Calendar.calendars.whose({name: "Calendar"})
-                        var defaultCalendar = calendars[0]
-                        var event = Calendar.Event({
-                          summary: "${fixture.name}", 
-                          startDate: new Date(${fixture.starting_at.getTime()}), 
-                          endDate: new Date(${fullTime.getTime()}),
-                          location: "${fixture.venue}"
-                        })
-                        defaultCalendar.events.push(event)
-                        event.show()
-                      `,
-                        { language: "JavaScript" },
-                      );
-                      await showToast({
-                        style: Toast.Style.Success,
-                        title: "Fixture saved to Calendar!",
+                      await confirmAlert({
+                        title: "Save to Calendar",
+                        message:
+                          "You are about to save this fixture date as an alert on the default Calendar app. Do you wish to continue?",
+                        primaryAction: {
+                          title: "Save",
+                          onAction: async () => {
+                            await runAppleScript(
+                              `
+                              var app = Application.currentApplication()
+                              var Calendar = Application("Calendar")
+                              Calendar.activate()
+                              var calendars = Calendar.calendars.whose({name: "Calendar"})
+                              var defaultCalendar = calendars[0]
+                              var event = Calendar.Event({
+                                summary: "${fixture.name}", 
+                                startDate: new Date(${fixture.starting_at.getTime()}), 
+                                endDate: new Date(${fullTime.getTime()}),
+                                location: "${fixture.venue}"
+                              })
+                              defaultCalendar.events.push(event)
+                              event.show()
+                            `,
+                              { language: "JavaScript" },
+                            );
+                            await showToast({
+                              style: Toast.Style.Success,
+                              title: "Fixture saved to Calendar!",
+                            });
+                          },
+                        },
                       });
                     }}
                   />
