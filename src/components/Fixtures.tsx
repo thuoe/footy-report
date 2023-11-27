@@ -42,6 +42,9 @@ const Fixtures = ({
           typeof fixture.score?.host_goals === "number"
             ? `${fixture.score.host_goals} - ${fixture.score.away_goals} |`
             : "";
+        const description = `${fixture.tvstations
+          ?.map((tvStation) => `${tvStation.name}: ${tvStation.url}`)
+          .join("\n")}`;
         return (
           <List.Item
             icon={resultIcon}
@@ -58,7 +61,7 @@ const Fixtures = ({
                       await confirmAlert({
                         title: "Save to Calendar",
                         message:
-                          "You are about to save this fixture date as an alert on the default Calendar app. Do you wish to continue?",
+                          "You are about to save this fixture as an alert on the default Calendar app. Do you wish to continue?",
                         primaryAction: {
                           title: "Save",
                           onAction: async () => {
@@ -70,7 +73,8 @@ const Fixtures = ({
                               var calendars = Calendar.calendars.whose({name: "Calendar"})
                               var defaultCalendar = calendars[0]
                               var event = Calendar.Event({
-                                summary: "${fixture.name}", 
+                                summary: "${fixture.name}",
+                                description: "${description}",
                                 startDate: new Date(${fixture.starting_at.getTime()}), 
                                 endDate: new Date(${fullTime.getTime()}),
                                 location: "${fixture.venue}"

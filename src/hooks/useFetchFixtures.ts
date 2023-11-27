@@ -23,10 +23,10 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
   const endDate = format(addDays(new Date(), 30), "y-MM-ii");
   const { data, isLoading, revalidate } = useSportMonksClient({
     method: "get",
-    path: `/fixtures/between/${startDate}/${endDate}/${teamId}?include=league;venue;participants;scores&select=name,${selectedFields}`,
+    path: `/fixtures/between/${startDate}/${endDate}/${teamId}?include=league;venue;participants;tvStations.tvStation;scores&select=name,${selectedFields}`,
   });
   const fixtures: Fixture[] = data?.data
-    ?.map(({ league, participants, scores, ...fixtureData }) => {
+    ?.map(({ league, participants, scores, tvstations, ...fixtureData }) => {
       const [host, away] = participants;
       return {
         name: fixtureData.name,
@@ -64,6 +64,10 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
               ? scores.reduce(computeScore("away"), 0)
               : undefined,
         },
+        tvstations: tvstations.map(({ tvstation }) => ({
+          name: tvstation.name,
+          url: tvstation.url,
+        })),
       };
     })
     .reverse();

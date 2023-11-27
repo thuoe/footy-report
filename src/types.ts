@@ -63,4 +63,8 @@ export type Fixture = {
     host_goals: number;
     away_goals: number;
   };
+  tvstations?: {
+    name: string;
+    url: string;
+  }[];
 };
