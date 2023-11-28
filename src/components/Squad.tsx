@@ -1,20 +1,72 @@
-import { List, Color, Image, ActionPanel, Action, Icon } from "@raycast/api";
-import { Category, Team } from "@src/types";
+import {
+  List,
+  Color,
+  Image,
+  ActionPanel,
+  Action,
+  Icon,
+  Grid,
+} from "@raycast/api";
+import { Category, Player, Team } from "@src/types";
 import PlayerDetails from "@src/components/PlayerDetails";
 
-const Squad = ({ team, limit }: { team: Team; limit?: number }) => {
+const Squad = ({
+  team,
+  limit,
+  type,
+}: {
+  team: Team;
+  limit?: number;
+  type: "grid" | "list";
+}) => {
   const limitedPlayers = team.players.slice(0, limit || team.players.length);
+
+  const sharedProps = (player: Player) => ({
+    key: player.id,
+    title: player.name,
+    actions: (
+      <ActionPanel title="Player Actions">
+        <Action.Push
+          title="View Player Details"
+          icon={Icon.PersonCircle}
+          target={
+            <PlayerDetails
+              team={{ name: team.name, image_path: team.image_path }}
+              player={player}
+            />
+          }
+        />
+      </ActionPanel>
+    ),
+  });
+
+  if (type === "grid") {
+    return (
+      <Grid.Section title={Category.Squad} inset={Grid.Inset.Large}>
+        {limitedPlayers.map((player) => {
+          return (
+            <Grid.Item
+              {...sharedProps(player)}
+              content={{ source: player.image_path }}
+              subtitle={player.jersey_number.toString()}
+              accessory={{ icon: { source: player.country.image_path } }}
+            />
+          );
+        })}
+      </Grid.Section>
+    );
+  }
+
   return (
     <List.Section title={Category.Squad} subtitle={`${team.players.length}`}>
       {limitedPlayers.map((player) => {
         return (
           <List.Item
+            {...sharedProps(player)}
             icon={{
               source: player?.image_path,
               mask: Image.Mask.Circle,
             }}
-            title={player.name}
-            key={player.id}
             subtitle={team.name}
             accessories={[
               {
