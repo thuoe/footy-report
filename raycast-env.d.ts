@@ -28,7 +28,10 @@ declare namespace Arguments {
   /** Arguments passed to the `test` command */
   export type Test = {}
   /** Arguments passed to the `searchTeam` command */
-  export type SearchTeam = {}
+  export type SearchTeam = {
+  /** Enter Team */
+  "team": string
+}
 }
 
 
