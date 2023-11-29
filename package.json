@@ -34,7 +34,15 @@
       "name": "searchTeam",
       "title": "Search Team",
       "description": "Search football team",
-      "mode": "view"
+      "mode": "view",
+      "arguments": [
+        {
+          "name": "team",
+          "placeholder": "Enter Team",
+          "type": "text",
+          "required": true
+        }
+      ]
     }
   ],
   "dependencies": {

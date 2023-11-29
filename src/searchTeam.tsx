@@ -3,6 +3,7 @@ import {
   ActionPanel,
   Icon,
   Image,
+  LaunchProps,
   List,
   LocalStorage,
   Toast,
@@ -14,8 +15,9 @@ import { useFetchTeams } from "@src/hooks";
 import { Team } from "@src/types";
 import { useState } from "react";
 
-export default () => {
-  const [searchText, setSearchText] = useState<string>("");
+export default (props: LaunchProps<{ arguments: Arguments.MyCommand }>) => {
+  const { team } = props.arguments;
+  const [searchText, setSearchText] = useState<string>(team || "");
   const {
     data: favoritesCached,
     isLoading: favoritesLoading,
