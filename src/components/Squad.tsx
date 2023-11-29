@@ -8,6 +8,7 @@ import {
   Grid,
 } from "@raycast/api";
 import { Category, Player, Team } from "@src/types";
+import { groupBy } from "@src/utils";
 import PlayerDetails from "@src/components/PlayerDetails";
 
 const Squad = ({
@@ -41,19 +42,30 @@ const Squad = ({
   });
 
   if (type === "grid") {
+    const groupedPlayers = groupBy(limitedPlayers, "position");
     return (
-      <Grid.Section title={Category.Squad} inset={Grid.Inset.Large}>
-        {limitedPlayers.map((player) => {
+      <>
+        {Object.keys(groupedPlayers).map((position) => {
           return (
-            <Grid.Item
-              {...sharedProps(player)}
-              content={{ source: player.image_path }}
-              subtitle={player.jersey_number.toString()}
-              accessory={{ icon: { source: player.country.image_path } }}
-            />
+            <Grid.Section
+              title={`${position}s`}
+              key={position}
+              inset={Grid.Inset.Large}
+            >
+              {groupedPlayers[position].map((player) => {
+                return (
+                  <Grid.Item
+                    {...sharedProps(player)}
+                    content={{ source: player.image_path }}
+                    subtitle={player.jersey_number.toString()}
+                    accessory={{ icon: { source: player.country.image_path } }}
+                  />
+                );
+              })}
+            </Grid.Section>
           );
         })}
-      </Grid.Section>
+      </>
     );
   }
 
