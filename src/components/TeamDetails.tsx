@@ -1,6 +1,6 @@
 import Fixtures from "@src/components/Fixtures";
 import Squad from "@src/components/Squad";
-import { List } from "@raycast/api";
+import { Grid, List } from "@raycast/api";
 import { Category, Team } from "@src/types";
 import { useState, ComponentProps } from "react";
 import { useFetchFixtures } from "@src/hooks";
@@ -24,49 +24,80 @@ const TeamDetails = ({ team }: { team: Team }) => {
     fixtures: prevFixtures,
   };
 
+  if (
+    category === Category.All ||
+    category === Category.UpcomingMatches ||
+    category === Category.PrevFixtures
+  ) {
+    return (
+      <List
+        throttle
+        isLoading={isLoading}
+        navigationTitle={`${team.name}`}
+        searchBarPlaceholder={`Search within ${team.name}`}
+        searchBarAccessory={
+          <List.Dropdown
+            tooltip="Select Category"
+            onChange={(newValue) => {
+              setCategory(newValue as Category);
+            }}
+            value={category}
+          >
+            {Object.values(Category).map((category) => {
+              return (
+                <List.Dropdown.Item
+                  title={category}
+                  key={category}
+                  value={category}
+                />
+              );
+            })}
+          </List.Dropdown>
+        }
+      >
+        <>
+          {category === Category.All && (
+            <>
+              <Fixtures {...upcomingProps} limit={6} />
+              <Fixtures {...prevProps} limit={6} />
+              <Squad type="list" team={team} limit={6} />
+            </>
+          )}
+          {category === Category.UpcomingMatches && (
+            <Fixtures {...upcomingProps} limit={6} />
+          )}
+          {category === Category.PrevFixtures && (
+            <Fixtures {...prevProps} limit={6} />
+          )}
+        </>
+      </List>
+    );
+  }
+
   return (
-    <List
-      throttle
-      isLoading={isLoading}
-      navigationTitle={`${team.name}`}
-      searchBarPlaceholder={`Search within ${team.name}`}
+    <Grid
       searchBarAccessory={
-        <List.Dropdown
+        <Grid.Dropdown
           tooltip="Select Category"
           onChange={(newValue) => {
             setCategory(newValue as Category);
           }}
-          defaultValue={Category.All}
+          value={category}
         >
           {Object.values(Category).map((category) => {
             return (
-              <List.Dropdown.Item
+              <Grid.Dropdown.Item
                 title={category}
                 key={category}
                 value={category}
               />
             );
           })}
-        </List.Dropdown>
+        </Grid.Dropdown>
       }
     >
-      <>
-        {category === Category.All && (
-          <>
-            <Fixtures {...upcomingProps} limit={6} />
-            <Fixtures {...prevProps} limit={6} />
-            <Squad team={team} limit={6} />
-          </>
-        )}
-        {category === Category.UpcomingMatches && (
-          <Fixtures {...upcomingProps} limit={6} />
-        )}
-        {category === Category.PrevFixtures && (
-          <Fixtures {...prevProps} limit={6} />
-        )}
-        {category === Category.Squad && <Squad team={team} limit={6} />}
-      </>
-    </List>
+      <Squad type="grid" team={team} limit={20} />
+    </Grid>
   );
 };
 
