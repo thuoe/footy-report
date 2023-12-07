@@ -1,4 +1,6 @@
 name: Simple CI Pipeline
+env:
+  default-branch: next
 on:
   pull_request:
     branches: [$default-branch]
