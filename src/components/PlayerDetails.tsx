@@ -1,18 +1,31 @@
 import { Detail } from "@raycast/api";
+import { useFetchPlayerStats } from "@src/hooks";
 import { Player } from "@src/types";
+import { createMarkdownTable } from "@src/utils";
 
 const PlayerDetails = ({
   player,
   team,
 }: {
   player: Player;
-  team: { name: string; image_path: string };
+  team: { id: string; name: string; image_path: string };
 }) => {
+  const { data, isLoading } = useFetchPlayerStats({
+    id: player.id,
+    teamId: team.id,
+  });
   const markdown = `
-  ![](${player.image_path}?raycast-width=300&raycast-height=300)
+  ![](${player.image_path}?raycast-width=150&raycast-height=150)
+
+  ${
+    !isLoading
+      ? createMarkdownTable([["Season", "Goals", "Assists", "Apps"], ...data])
+      : "Loading...."
+  }
   `;
   return (
     <Detail
+      isLoading={isLoading}
       markdown={markdown}
       navigationTitle={`${player.name}`}
       metadata={
