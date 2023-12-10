@@ -26,3 +26,34 @@ export const groupBy = <T extends object, K extends keyof T>(
   });
   return map.size > 0 ? Object.fromEntries(map) : {};
 };
+
+export const createMarkdownTable = (data: any[][]) => {
+  let table = "|";
+
+  // column names
+  for (let i = 0; i < data[0].length; i++) {
+    table += ` ${data[0][i]} |`;
+  }
+
+  table += "\n";
+  table += "|";
+
+  // column seperator
+  for (let i = 0; i < data[0].length; i++) {
+    const columnNameLength = data[0][i].length;
+    const seperator = "-".repeat(columnNameLength);
+    table += `${seperator} |`;
+  }
+
+  table += "\n";
+
+  for (let row = 1; row < data.length; row++) {
+    table += "|";
+    for (let col = 0; col < data[row].length; col++) {
+      table += ` ${data[row][col]} |`;
+    }
+    table += "\n";
+  }
+
+  return table;
+};
