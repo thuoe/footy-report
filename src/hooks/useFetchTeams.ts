@@ -23,7 +23,7 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
         image_path: team.image_path,
         players: team.players.map(({ player, ...rest }) => {
           return {
-            id: rest.id,
+            id: player.id,
             jersey_number: rest.jersey_number,
             name: player.display_name,
             date_of_birth: player.date_of_birth,
