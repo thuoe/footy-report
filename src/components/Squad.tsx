@@ -32,7 +32,11 @@ const Squad = ({
           icon={Icon.PersonCircle}
           target={
             <PlayerDetails
-              team={{ name: team.name, image_path: team.image_path }}
+              team={{
+                id: team.id,
+                name: team.name,
+                image_path: team.image_path,
+              }}
               player={player}
             />
           }
@@ -102,7 +106,11 @@ const Squad = ({
                   icon={Icon.PersonCircle}
                   target={
                     <PlayerDetails
-                      team={{ name: team.name, image_path: team.image_path }}
+                      team={{
+                        id: team.id,
+                        name: team.name,
+                        image_path: team.image_path,
+                      }}
                       player={player}
                     />
                   }
