@@ -4,6 +4,8 @@ enum EventType {
   GOALS = 52,
   ASSISTS = 79,
   APPS = 321,
+  RED_CARDS = 83,
+  YELLOW_CARDS = 84,
 }
 
 const isEvent =
@@ -40,7 +42,11 @@ const useFetchPlayerStats = ({
     const assists = details.find(isEvent(EventType.ASSISTS))?.value?.total ?? 0;
     const appearances =
       details.find(isEvent(EventType.APPS))?.value?.total ?? 0;
-    return [name, goals, assists, appearances];
+    const yellowCards =
+      details.find(isEvent(EventType.YELLOW_CARDS))?.value?.total ?? 0;
+    const redCards =
+      details.find(isEvent(EventType.RED_CARDS))?.value?.total ?? 0;
+    return [name, goals, assists, appearances, yellowCards, redCards];
   });
 
   return { data: stats, isLoading, revalidate };

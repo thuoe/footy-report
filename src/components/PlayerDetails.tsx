@@ -19,7 +19,10 @@ const PlayerDetails = ({
 
   ${
     !isLoading
-      ? createMarkdownTable([["Season", "Goals", "Assists", "Apps"], ...data])
+      ? createMarkdownTable([
+          ["Season", "Goals", "Assists", "Apps", "Yellow Cards", "Red Cards"],
+          ...data,
+        ])
       : "Loading...."
   }
   `;
