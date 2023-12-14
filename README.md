@@ -26,7 +26,11 @@ Search a football team by name and display all relevant data regarding recent re
 
 Trigger a simple API endpoint test using a SportsMonk API token to identify a successful response or not
 
-### League Stats
+### Search League Standings
+
+🛠️ Under development
+
+### Search League Stats
 
 🛠️ Under development
 
@@ -34,7 +38,7 @@ Trigger a simple API endpoint test using a SportsMonk API token to identify a su
 
 All preferences can be customized through `Raycast Settings > Extensions > Footy Report`
 
-| Name          | Description                                                                  | Default Value | Required |
-| ------------- | ---------------------------------------------------------------------------- | ------------- | -------- |
-| API Key       | SportMonks API token used to fetch all relevant football data                |               | True     |
-| Calendar Name | Name of the calendar on Calendar.app you wish to save upcoming fixture dates | `Calendar`    | True     |
+| Name            | Description                                                                  | Default Value | Required |
+| --------------- | ---------------------------------------------------------------------------- | ------------- | -------- |
+| `API Key`       | SportMonks API token used to fetch all relevant football data                |               | `true`   |
+| `Calendar Name` | Name of the calendar on Calendar.app you wish to save upcoming fixture dates | `Calendar`    | `true`   |
