@@ -27,7 +27,9 @@ export const groupBy = <T extends object, K extends keyof T>(
   return map.size > 0 ? Object.fromEntries(map) : {};
 };
 
-export const createMarkdownTable = (data: any[][]) => {
+export const createMarkdownTable = (
+  data: [string[], ...[string | number | boolean][]],
+) => {
   let table = "|";
 
   // column names
