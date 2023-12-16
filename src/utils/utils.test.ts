@@ -1,4 +1,4 @@
-import { formatSelectFields, groupBy } from ".";
+import { formatSelectFields, groupBy, createMarkdownTable } from ".";
 
 describe("util functions", () => {
   it("can select & format fields based on boolean flag", () => {
@@ -15,6 +15,16 @@ describe("util functions", () => {
     expect(formatSelectFields({ result_info: false, starting_at: false })).toBe(
       "",
     );
+  });
+
+  it("can create a markdown table from a 2 dimensional array of data", () => {
+    const data = ["Name", "Age", "Gender"];
+    const markdown = createMarkdownTable([data, ["Eddie", 27, "Male"]]);
+    const expectedMarkdown =
+      "| Name | Age | Gender |\n" +
+      "|---- |--- |------ |\n" +
+      "| Eddie | 27 | Male |\n";
+    expect(markdown).toBe(expectedMarkdown);
   });
 
   it("can group objects together by common prop", () => {
