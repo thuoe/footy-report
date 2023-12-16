@@ -1,4 +1,4 @@
-import { computeSelectFields } from "@src/utils";
+import { formatSelectFields } from "@src/utils";
 import useSportMonksClient from "./useSportMonksClient";
 import { subDays, format, addDays } from "date-fns";
 import { Fixture, Result } from "@src/types";
@@ -18,7 +18,7 @@ const computeScore =
   };
 
 const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
-  const selectedFields = computeSelectFields(selectFields);
+  const selectedFields = formatSelectFields(selectFields);
   const startDate = format(subDays(new Date(), 30), "y-MM-ii");
   const endDate = format(addDays(new Date(), 30), "y-MM-ii");
   const { data, isLoading, revalidate } = useSportMonksClient({

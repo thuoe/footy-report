@@ -1,4 +1,4 @@
-export const computeSelectFields = <T extends Record<string, boolean>>(
+export const formatSelectFields = <T extends Record<string, boolean>>(
   selectFields: T,
 ) => {
   const selectParams: string[] = [];
