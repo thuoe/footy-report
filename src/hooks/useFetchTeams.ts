@@ -1,6 +1,6 @@
 import { useSportMonksClient } from "@src/hooks";
 import { Team } from "@src/types";
-import { computeSelectFields } from "@src/utils";
+import { formatSelectFields } from "@src/utils";
 
 const MAX_RESULTS_PER_PAGE = 10;
 
@@ -9,7 +9,7 @@ type SelectFields = {
 };
 
 const useFetchTeams = (name: string, selectFields: SelectFields) => {
-  const selectedFields = computeSelectFields(selectFields);
+  const selectedFields = formatSelectFields(selectFields);
   const { data, isLoading, revalidate } = useSportMonksClient({
     method: "get",
     path: `/teams/search/${name}?per_page=${MAX_RESULTS_PER_PAGE}&select=name,${selectedFields}&include=players.player.position;players.player.country`,
