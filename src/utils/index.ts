@@ -28,7 +28,7 @@ export const groupBy = <T extends object, K extends keyof T>(
 };
 
 export const createMarkdownTable = (
-  data: [string[], ...[string | number | boolean][]],
+  data: [string[], (string | number | boolean)[]],
 ) => {
   let table = "|";
 
