@@ -1,16 +1,61 @@
 import { formatSelectFields } from "@src/utils";
 import useSportMonksClient from "./useSportMonksClient";
 import { subDays, format, addDays } from "date-fns";
-import { Fixture, Result } from "@src/types";
+import { Fixture, Result, Location } from "@src/types";
 
 type SelectFields = {
   result_info: boolean;
   starting_at: boolean;
 };
 
+type SportMonksLeagueField = {
+  id: string;
+  name: string;
+  image_path: string;
+};
+
+type SportMonksParticipantField = {
+  id: string;
+  name: string;
+  image_path: string;
+  meta: {
+    location: Location;
+  };
+};
+
+type SportMonksScoreField = {
+  score: {
+    goals: number;
+    participant: "home" | "away";
+  };
+  description: string;
+};
+
+type SportMonksTVStationField = {
+  tvstation: {
+    name: string;
+    url: string;
+  };
+};
+
+type SportMonksVenueField = {
+  name: string;
+};
+
+type SportMonksFixturesByRange = {
+  name: string;
+  result_info: string;
+  starting_at: string;
+  league: SportMonksLeagueField;
+  participants: SportMonksParticipantField[];
+  scores: SportMonksScoreField[];
+  tvstations: SportMonksTVStationField[];
+  venue: SportMonksVenueField;
+};
+
 const computeScore =
-  (participant) =>
-  (goals, { score, description }) => {
+  (participant: string) =>
+  (goals: number, { score, description }: SportMonksScoreField) => {
     if (score.participant === participant && description === "CURRENT") {
       return goals + score.goals;
     }
@@ -25,7 +70,8 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
     method: "get",
     path: `/fixtures/between/${startDate}/${endDate}/${teamId}?include=league;venue;participants;tvStations.tvStation;scores&select=name,${selectedFields}`,
   });
-  const fixtures: Fixture[] = data?.data
+  const response: SportMonksFixturesByRange[] = data?.data;
+  const fixtures: Fixture[] = response
     ?.map(({ league, participants, scores, tvstations, ...fixtureData }) => {
       const [host, away] = participants;
       return {
@@ -52,17 +98,14 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
           ? Result.Draw
           : fixtureData?.result_info?.includes("loss")
           ? Result.Loss
-          : null,
-        location: participants.find((p) => p.id === teamId).meta.location,
+          : undefined,
+        location: participants.find((p) => p.id === teamId)?.meta
+          .location as Location,
         score: {
           host_goals:
-            scores.length > 0
-              ? scores.reduce(computeScore("home"), 0)
-              : undefined,
+            scores.length > 0 ? scores.reduce(computeScore("home"), 0) : null,
           away_goals:
-            scores.length > 0
-              ? scores.reduce(computeScore("away"), 0)
-              : undefined,
+            scores.length > 0 ? scores.reduce(computeScore("away"), 0) : null,
         },
         tvstations: tvstations.map(({ tvstation }) => ({
           name: tvstation.name,
