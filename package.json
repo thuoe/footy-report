@@ -13,6 +13,14 @@
       "description": "SportMonks API Key used to fetch all relevant football data",
       "type": "password",
       "required": true
+    },
+    {
+      "title": "Calendar Name",
+      "name": "calendarName",
+      "description": "Name of the calendar you wish to save all fixture dates",
+      "type": "textfield",
+      "default": "Calendar",
+      "required": false
     }
   ],
   "commands": [
@@ -21,19 +29,37 @@
       "title": "Test API",
       "description": "Confirm if the SportsMonk API key provided produces a successful response",
       "mode": "view"
+    },
+    {
+      "name": "searchTeam",
+      "title": "Search Team",
+      "description": "Search football team",
+      "mode": "view",
+      "arguments": [
+        {
+          "name": "team",
+          "placeholder": "Enter Team",
+          "type": "text",
+          "required": true
+        }
+      ]
     }
   ],
   "dependencies": {
     "@raycast/api": "^1.60.1",
     "@raycast/utils": "^1.10.0",
-    "axios": "^1.6.1"
+    "axios": "^1.6.1",
+    "date-fns": "^2.30.0"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.6",
+    "@types/jest": "^29.5.11",
     "@types/node": "18.18.4",
     "@types/react": "18.2.27",
     "eslint": "^8.51.0",
+    "jest": "^29.7.0",
     "prettier": "^3.0.3",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.2.2"
   },
   "scripts": {
@@ -41,6 +67,7 @@
     "dev": "ray develop",
     "fix-lint": "ray lint --fix",
     "lint": "ray lint",
-    "publish": "npx @raycast/api@latest publish"
+    "publish": "npx @raycast/api@latest publish",
+    "test": "jest"
   }
 }

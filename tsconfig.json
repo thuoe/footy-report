@@ -7,7 +7,10 @@
       "@src/api": ["./src/api"],
       "@src/api/*": ["./src/api/*"],
       "@src/hooks": ["./src/hooks"],
-      "@src/hooks/*": ["./src/hooks/*"]
+      "@src/hooks/*": ["./src/hooks/*"],
+      "@src/components/*": ["./src/components/*"],
+      "@src/utils": ["./src/utils"],
+      "@src/types": ["./src/types"]
     },
     "lib": ["es2021"],
     "module": "commonjs",
