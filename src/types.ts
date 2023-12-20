@@ -60,8 +60,8 @@ export type Fixture = {
     away: Participant;
   };
   score?: {
-    host_goals: number;
-    away_goals: number;
+    host_goals: number | null;
+    away_goals: number | null;
   };
   tvstations?: {
     name: string;

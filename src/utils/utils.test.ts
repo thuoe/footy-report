@@ -18,8 +18,10 @@ describe("util functions", () => {
   });
 
   it("can create a markdown table from a 2 dimensional array of data", () => {
-    const data = ["Name", "Age", "Gender"];
-    const markdown = createMarkdownTable([data, ["Eddie", 27, "Male"]]);
+    const markdown = createMarkdownTable([
+      ["Name", "Age", "Gender"],
+      ["Eddie", 27, "Male"],
+    ]);
     const expectedMarkdown =
       "| Name | Age | Gender |\n" +
       "|---- |--- |------ |\n" +

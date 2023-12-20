@@ -15,7 +15,7 @@ import { useFetchTeams } from "@src/hooks";
 import { Team } from "@src/types";
 import { useState } from "react";
 
-export default (props: LaunchProps<{ arguments: Arguments.MyCommand }>) => {
+export default (props: LaunchProps<{ arguments: Arguments.SearchTeam }>) => {
   const { team } = props.arguments;
   const [searchText, setSearchText] = useState<string>(team || "");
   const {
