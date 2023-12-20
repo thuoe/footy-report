@@ -8,6 +8,30 @@ type SelectFields = {
   image_path?: boolean;
 };
 
+type SportMonksPlayerField = {
+  jersey_number: number;
+  player: {
+    id: string;
+    date_of_birth: string;
+    display_name: string;
+    image_path: string;
+    position: {
+      name: string;
+    };
+    country: {
+      name: string;
+      image_path: string;
+    };
+  };
+};
+
+type SportMonksTeamResponse = {
+  id: string;
+  name: string;
+  image_path: string;
+  players: SportMonksPlayerField[];
+};
+
 const useFetchTeams = (name: string, selectFields: SelectFields) => {
   const selectedFields = formatSelectFields(selectFields);
   const { data, isLoading, revalidate } = useSportMonksClient({
@@ -15,8 +39,9 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
     path: `/teams/search/${name}?per_page=${MAX_RESULTS_PER_PAGE}&select=name,${selectedFields}&include=players.player.position;players.player.country`,
     execute: name.length !== 0,
   });
+  const response: SportMonksTeamResponse[] = data?.data;
   const teams: Team[] =
-    data?.data?.map((team) => {
+    response?.map((team) => {
       return {
         id: team.id,
         name: team.name,
@@ -28,7 +53,7 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
             name: player.display_name,
             date_of_birth: player.date_of_birth,
             image_path: player.image_path,
-            position: player.position?.name,
+            position: player.position.name,
             country: {
               name: player.country.name,
               image_path: player.country.image_path,
