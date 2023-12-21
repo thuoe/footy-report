@@ -16,7 +16,7 @@ export type Player = {
   date_of_birth: string;
   image_path: string;
   jersey_number: number;
-  position: string;
+  position?: string;
   country: Country;
 };
 

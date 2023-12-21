@@ -16,7 +16,7 @@ type SportMonksPlayerField = {
     display_name: string;
     image_path: string;
     position: {
-      name: string;
+      name?: string;
     };
     country: {
       name: string;
@@ -53,7 +53,7 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
             name: player.display_name,
             date_of_birth: player.date_of_birth,
             image_path: player.image_path,
-            position: player.position.name,
+            position: player.position?.name,
             country: {
               name: player.country.name,
               image_path: player.country.image_path,
