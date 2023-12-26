@@ -1,4 +1,10 @@
-import { Action, ActionPanel, Detail, popToRoot } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  Detail,
+  openExtensionPreferences,
+  popToRoot,
+} from "@raycast/api";
 import { AxiosResponse } from "axios";
 
 export const getJSONSnippet = (content: string) => "```" + content;
@@ -21,6 +27,10 @@ ${getJSONSnippet(content)}`}
           <Action.CopyToClipboard
             content={content}
             onCopy={() => popToRoot()}
+          />
+          <Action
+            title="Open Extension Preferences"
+            onAction={openExtensionPreferences}
           />
         </ActionPanel>
       }
