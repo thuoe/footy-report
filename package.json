@@ -26,8 +26,8 @@
   "commands": [
     {
       "name": "test",
-      "title": "Test API",
-      "description": "Confirm if the SportsMonk API key provided produces a successful response",
+      "title": "Test Endpoint",
+      "description": "Test SportMonks API Endpoints using access token",
       "mode": "view"
     },
     {
