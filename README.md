@@ -28,7 +28,7 @@ Search a football team by name and display all relevant data regarding recent re
 
 ### Test API
 
-![Test API](metadata/footy-report-2.png)
+![Test API](metadata/footy-report-6.png)
 
 Trigger a simple API endpoint test using a SportsMonk API token to identify a successful response or not
 
