@@ -2,7 +2,7 @@ import useSportMonksClient from "./useSportMonksClient";
 
 type Participant = {
   name: string;
-  img_path: string;
+  image_path: string;
 };
 
 type Form = {
@@ -32,7 +32,7 @@ const useFetchStandings = (seasonId: string) => {
     response?.map(({ participant, ...rest }) => {
       return {
         name: participant.name,
-        img_path: participant.img_path,
+        img_path: participant.image_path,
         position: rest.position,
         points: rest.points,
         played: rest.form.length,
@@ -41,6 +41,8 @@ const useFetchStandings = (seasonId: string) => {
         draws: rest.form.filter(({ form }) => form === "D").length,
       };
     }) ?? [];
+
+  console.log(JSON.stringify(finalData, null, 2));
 
   return { data: finalData, isLoading, revalidate };
 };
