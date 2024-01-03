@@ -3,7 +3,7 @@ import useSportMonksClient from "./useSportMonksClient";
 type SportMonksSeason = {
   id: string;
   name: string;
-  is_active: boolean;
+  is_current: boolean;
 };
 
 type SportMonksLeagueRespsonse = {
@@ -25,7 +25,7 @@ const useFetchLeagues = (name: string) => {
       id: league.id,
       name: league.name,
       image_path: league.image_path,
-      season: seasons.find((season) => season.is_active),
+      season: seasons.find((season) => season.is_current),
     })) ?? [];
   return { data: finalData, isLoading, revalidate };
 };
