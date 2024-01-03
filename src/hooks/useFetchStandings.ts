@@ -9,6 +9,7 @@ type Form = {
   fixture: {
     name: string;
     result_info: string;
+    starting_at_timestamp: number;
   };
   form: "W" | "D" | "L";
 };
@@ -19,6 +20,8 @@ type SportMonksStandingResponse = {
   form: Form[];
   participant: Participant;
 };
+
+const MAX_FORM_FIXTURES = 4;
 
 const useFetchStandings = (seasonId: string) => {
   const { data, isLoading, revalidate } = useSportMonksClient({
@@ -39,10 +42,21 @@ const useFetchStandings = (seasonId: string) => {
         wins: rest.form.filter(({ form }) => form === "W").length,
         losses: rest.form.filter(({ form }) => form === "L").length,
         draws: rest.form.filter(({ form }) => form === "D").length,
+        recentForm: rest.form
+          .sort((a, b) => {
+            return (
+              new Date(a.fixture.starting_at_timestamp).getTime() -
+              new Date(b.fixture.starting_at_timestamp).getTime()
+            );
+          })
+          .map(({ form, fixture }) => ({
+            result: form,
+            name: fixture.name,
+          }))
+          .reverse()
+          .slice(0, MAX_FORM_FIXTURES),
       };
     }) ?? [];
-
-  console.log(JSON.stringify(finalData, null, 2));
 
   return { data: finalData, isLoading, revalidate };
 };
