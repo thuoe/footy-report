@@ -35,6 +35,7 @@ const useFetchStandings = (seasonId: string) => {
         img_path: participant.img_path,
         position: rest.position,
         points: rest.points,
+        played: rest.form.length,
         wins: rest.form.filter(({ form }) => form === "W").length,
         losses: rest.form.filter(({ form }) => form === "L").length,
         draws: rest.form.filter(({ form }) => form === "D").length,
