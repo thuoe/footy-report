@@ -4,7 +4,7 @@ import { useFetchStandings } from "@src/hooks";
 const Standings = ({ seasonId }: { seasonId: string }) => {
   const { data: standings, isLoading } = useFetchStandings(seasonId);
   return (
-    <List isLoading={isLoading}>
+    <List searchBarPlaceholder={"Search team"} isLoading={isLoading}>
       {standings.length === 0 ? (
         <List.EmptyView title="No League Standings Found!" />
       ) : (
