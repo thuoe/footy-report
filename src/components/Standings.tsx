@@ -1,10 +1,38 @@
-import { Color, Icon, List } from "@raycast/api";
-import { useFetchStandings } from "@src/hooks";
+import {
+  Action,
+  ActionPanel,
+  Color,
+  Icon,
+  List,
+  useNavigation,
+} from "@raycast/api";
+import { useFetchStandings, useFetchTeams } from "@src/hooks";
+import { useEffect, useState } from "react";
+import TeamDetails from "@src/components/TeamDetails";
 
 const Standings = ({ seasonId }: { seasonId: string }) => {
+  const { push } = useNavigation();
+  const [teamName, setTeamName] = useState<string>("");
   const { data: standings, isLoading } = useFetchStandings(seasonId);
+  const { data: teamsFound, isLoading: isTeamLoading } = useFetchTeams(
+    teamName,
+    {
+      image_path: true,
+    },
+  );
+
+  useEffect(() => {
+    if (teamsFound.length > 0 && !isTeamLoading) {
+      const [team] = teamsFound;
+      push(<TeamDetails team={team} />);
+    }
+  }, [JSON.stringify(teamsFound)]);
+
   return (
-    <List searchBarPlaceholder={"Search team"} isLoading={isLoading}>
+    <List
+      searchBarPlaceholder={"Search team"}
+      isLoading={isLoading || isTeamLoading}
+    >
       {standings.length === 0 ? (
         <List.EmptyView title="No League Standings Found!" />
       ) : (
@@ -16,6 +44,16 @@ const Standings = ({ seasonId }: { seasonId: string }) => {
               key={standing.name}
               subtitle={standing.name}
               keywords={[standing.name]}
+              actions={
+                <ActionPanel>
+                  <Action
+                    title="Open Team Details"
+                    onAction={() => {
+                      setTeamName(standing.name);
+                    }}
+                  />
+                </ActionPanel>
+              }
               accessories={[
                 {
                   text: {
