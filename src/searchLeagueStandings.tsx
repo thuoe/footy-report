@@ -12,6 +12,7 @@ import { useCachedPromise } from "@raycast/utils";
 import { useFetchLeagues } from "./hooks";
 import { useState } from "react";
 import { League } from "@src/types";
+import Standings from "@src/components/Standings";
 
 export default () => {
   const {
@@ -111,6 +112,11 @@ export default () => {
                 icon={{ mask: Image.Mask.Circle, source: league.image_path }}
                 actions={
                   <ActionPanel title="League Actions">
+                    <Action.Push
+                      title="View League Standing"
+                      icon={Icon.ArrowRightCircleFilled}
+                      target={<Standings seasonId={league.season?.id || ""} />}
+                    />
                     <Action
                       title="Favorite League"
                       icon={Icon.Star}
