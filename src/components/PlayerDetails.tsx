@@ -32,7 +32,6 @@ const PlayerDetails = ({
   const dobLabel = player.date_of_birth
     ? `${player.date_of_birth} (${age} years)`
     : "N/A";
-  console.log(`Age: ${age}`);
   return (
     <Detail
       isLoading={isLoading}
