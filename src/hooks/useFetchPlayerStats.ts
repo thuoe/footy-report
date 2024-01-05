@@ -53,8 +53,9 @@ const useFetchPlayerStats = ({
 
   const response: SportMonksPlayerStatsDetail[] = data?.data?.statistics;
 
-  const stats = response?.map(
-    ({ season, details }: SportMonksPlayerStatsDetail) => {
+  const stats = response
+    ?.filter(({ details }) => details.length > 0)
+    ?.map(({ season, details }: SportMonksPlayerStatsDetail) => {
       const { name } = season;
       const goals = details.find(isEvent(EventType.GOALS))?.value.total ?? 0;
       const assists =
@@ -66,8 +67,7 @@ const useFetchPlayerStats = ({
       const redCards =
         details.find(isEvent(EventType.RED_CARDS))?.value.total ?? 0;
       return [name, goals, assists, appearances, yellowCards, redCards];
-    },
-  );
+    });
 
   return { data: stats, isLoading, revalidate };
 };
