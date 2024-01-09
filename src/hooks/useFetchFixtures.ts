@@ -71,6 +71,9 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
     method: "get",
     path: `/fixtures/between/${startDate}/${endDate}/${teamId}?include=league;venue;participants;tvStations.tvStation;scores&select=name,${selectedFields}`,
   });
+  if (data?.status === 401) {
+    return { data: [], error: "Invalid API Token", isLoading, revalidate };
+  }
   const response: SportMonksFixturesByRange[] = data?.data;
   const fixtures: Fixture[] = response
     ?.map(({ league, participants, scores, tvstations, ...fixtureData }) => {
@@ -116,7 +119,7 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
       };
     })
     .reverse();
-  return { data: fixtures, isLoading, revalidate };
+  return { data: fixtures, error: null, isLoading, revalidate };
 };
 
 export default useFetchFixtures;

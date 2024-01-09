@@ -39,6 +39,9 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
     path: `/teams/search/${name}?per_page=${MAX_RESULTS_PER_PAGE}&select=name,${selectedFields}&include=players.player.position;players.player.country`,
     execute: name.length !== 0,
   });
+  if (data?.status === 401) {
+    return { data: [], error: "Invalid API Token", isLoading, revalidate };
+  }
   const response: SportMonksTeamResponse[] = data?.data;
   const teams: Team[] =
     response?.map((team) => {
@@ -62,7 +65,7 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
         }),
       };
     }) ?? [];
-  return { data: teams, isLoading, revalidate };
+  return { data: teams, error: null, isLoading, revalidate };
 };
 
 export default useFetchTeams;

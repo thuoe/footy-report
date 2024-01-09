@@ -61,8 +61,11 @@ const useFetchPlayerStats = ({
     path: `/players/${id}?include=statistics.season.league;statistics.details&filters=playerStatisticDetailTypes:${formatEvents()};team=${teamId}`,
   });
 
-  const response: SportMonksPlayerStatsDetail[] = data?.data?.statistics;
+  if (data?.status === 401) {
+    return { data: [], error: "Invalid API Token", isLoading, revalidate };
+  }
 
+  const response: SportMonksPlayerStatsDetail[] = data?.data?.statistics;
   const stats = response
     ?.filter(
       ({ team_id, details, season: { league } }) =>
@@ -84,7 +87,7 @@ const useFetchPlayerStats = ({
       return [name, goals, assists, appearances, yellowCards, redCards];
     });
 
-  return { data: stats, isLoading, revalidate };
+  return { data: stats, error: null, isLoading, revalidate };
 };
 
 export default useFetchPlayerStats;
