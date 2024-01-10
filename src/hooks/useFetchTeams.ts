@@ -1,5 +1,5 @@
 import { useSportMonksClient } from "@src/hooks";
-import { Team } from "@src/types";
+import { HookResponse, Team } from "@src/types";
 import { formatSelectFields } from "@src/utils";
 
 const MAX_RESULTS_PER_PAGE = 10;
@@ -39,8 +39,14 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
     path: `/teams/search/${name}?per_page=${MAX_RESULTS_PER_PAGE}&select=name,${selectedFields}&include=players.player.position;players.player.country`,
     execute: name.length !== 0,
   });
+  const hookResponse: HookResponse<Team, typeof revalidate> = {
+    error: null,
+    data: [],
+    isLoading,
+    revalidate,
+  };
   if (data?.status === 401) {
-    return { data: [], error: "Invalid API Token", isLoading, revalidate };
+    return { ...hookResponse, error: "Invalid API Token" };
   }
   const response: SportMonksTeamResponse[] = data?.data;
   const teams: Team[] =
@@ -65,7 +71,7 @@ const useFetchTeams = (name: string, selectFields: SelectFields) => {
         }),
       };
     }) ?? [];
-  return { data: teams, error: null, isLoading, revalidate };
+  return { ...hookResponse, data: teams };
 };
 
 export default useFetchTeams;
