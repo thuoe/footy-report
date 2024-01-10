@@ -1,7 +1,7 @@
 import { formatSelectFields } from "@src/utils";
 import useSportMonksClient from "./useSportMonksClient";
 import { subDays, format, addDays } from "date-fns";
-import { Fixture, Result, Location } from "@src/types";
+import { Fixture, Result, Location, HookResponse } from "@src/types";
 
 type SelectFields = {
   result_info: boolean;
@@ -43,6 +43,7 @@ type SportMonksVenueField = {
 };
 
 type SportMonksFixturesByRange = {
+  id: string;
   name: string;
   result_info: string;
   starting_at: string;
@@ -70,11 +71,23 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
     method: "get",
     path: `/fixtures/between/${startDate}/${endDate}/${teamId}?include=league;venue;participants;tvStations.tvStation;scores&select=name,${selectedFields}`,
   });
+  const hookResponse: HookResponse<Fixture, typeof revalidate> = {
+    data: [],
+    isLoading,
+    error: null,
+    revalidate,
+  };
+
+  if (data?.status === 401) {
+    return { ...hookResponse, error: "Invalid API Token" };
+  }
+
   const response: SportMonksFixturesByRange[] = data?.data;
   const fixtures: Fixture[] = response
     ?.map(({ league, participants, scores, tvstations, ...fixtureData }) => {
       const [host, away] = participants;
       return {
+        id: fixtureData.id,
         name: fixtureData.name,
         starting_at: new Date(fixtureData.starting_at),
         league: {
@@ -115,7 +128,7 @@ const useFetchFixtures = (teamId: string, selectFields: SelectFields) => {
       };
     })
     .reverse();
-  return { data: fixtures, isLoading, revalidate };
+  return { ...hookResponse, data: fixtures };
 };
 
 export default useFetchFixtures;
