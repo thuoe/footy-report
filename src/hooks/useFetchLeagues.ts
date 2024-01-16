@@ -11,6 +11,7 @@ type SportMonksLeagueRespsonse = {
   name: string;
   image_path: string;
   seasons: SportMonksSeason[];
+  sub_type: string;
 };
 
 const useFetchLeagues = (name: string) => {
@@ -21,12 +22,14 @@ const useFetchLeagues = (name: string) => {
   });
   const response: SportMonksLeagueRespsonse[] = data?.data;
   const finalData =
-    response?.map(({ seasons, ...league }) => ({
-      id: league.id,
-      name: league.name,
-      image_path: league.image_path,
-      season: seasons.find((season) => season.is_current),
-    })) ?? [];
+    response
+      ?.filter((league) => league.sub_type === "domestic")
+      ?.map(({ seasons, ...league }) => ({
+        id: league.id,
+        name: league.name,
+        image_path: league.image_path,
+        season: seasons.find((season) => season.is_current),
+      })) ?? [];
   return { data: finalData, isLoading, revalidate };
 };
 
