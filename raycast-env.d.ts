@@ -22,6 +22,8 @@ declare namespace Preferences {
   export type Test = ExtensionPreferences & {}
   /** Preferences accessible in the `searchTeam` command */
   export type SearchTeam = ExtensionPreferences & {}
+  /** Preferences accessible in the `searchLeagueStandings` command */
+  export type SearchLeagueStandings = ExtensionPreferences & {}
 }
 
 declare namespace Arguments {
@@ -32,6 +34,8 @@ declare namespace Arguments {
   /** Enter Team */
   "team": string
 }
+  /** Arguments passed to the `searchLeagueStandings` command */
+  export type SearchLeagueStandings = {}
 }
 
 
