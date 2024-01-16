@@ -1,6 +1,6 @@
 # Footy Report Changelog
 
-## [New Command] - 2024-01-05
+## [New Command] - 2024-01-16
 
 - **Search League Standings** A command to search for league standings, displaying position, points, wins, loss and draws
 
